@@ -16,6 +16,19 @@ app.whenReady().then(async()=>{
     await wait();
     check($('#content-body .hero'),'Home renders');
     check(getComputedStyle($('.hero')).height==='160px','Accepted compact hero');
+    const mark=$('.quick-tile .site-icon');
+    check(mark,'Pinned resources request a website icon');
+    check(mark.referrerPolicy==='no-referrer','Icon requests omit the referrer');
+    const tile=mark.parentElement;
+    const loaded=new Promise((resolve,reject)=>{mark.onload=resolve;mark.onerror=()=>reject(Error('Fixture icon failed'))});
+    mark.src='data:image/svg+xml,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"><circle cx="16" cy="16" r="12" fill="pink"/></svg>');
+    await loaded;
+    check(tile.classList.contains('has-icon'),'Decoded icon replaces initials');
+    check(getComputedStyle(tile.querySelector('.glyph-initials')).visibility==='hidden','Loaded initials are hidden');
+    const failed=new Promise(resolve=>{mark.onerror=resolve});
+    mark.src='data:image/png;base64,broken';await failed;
+    check(!tile.classList.contains('has-icon')&&!tile.querySelector('img'),'Failed image is removed');
+    check(getComputedStyle(tile.querySelector('.glyph-initials')).visibility==='visible','Failed icons restore initials');
     $('[data-view="discover"]').click();
     check($('#content-body h1').textContent.includes('All resources'),'All resources navigation');
     $('#add-floating').click();await wait();
@@ -37,7 +50,7 @@ app.whenReady().then(async()=>{
     $('#sidebar-add').click();$('#category-name').value='<img src=x onerror=alert(1)>';
     $('#category-form').requestSubmit();await wait();
     check(!$('#pack-nav img'),'Category renders as text');
-    return 'Save, search, category creation/rename, validation and escaping passed';
+    return 'Icon loading/fallback, save, search, category creation/rename, validation and escaping passed';
   })()`);
   console.log(result);
   await new Promise(resolve=>{win.webContents.once('did-finish-load',resolve);win.reload();});

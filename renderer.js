@@ -15,7 +15,21 @@
   const isUrl = text => {try { resources.normalizeUrl(text); return true; } catch { return false; }};
   const safeUrl = resources.normalizeUrl;
   const letters = name => name.replace(/[^a-z0-9. ]/gi,'').split(/\s+/).filter(Boolean).slice(0,2).map(w=>w[0]).join('').toUpperCase().slice(0,2);
-  const glyph = item => `<span class="tool-glyph ${esc(item.pack.toLowerCase())}">${esc(letters(item.title) || 'T')}</span>`;
+  const failedIcons = new Set();
+  const glyph = item => {
+    const src = resources.faviconUrl(item.url);
+    return `<span class="tool-glyph ${esc(String(item.pack || 'Other').toLowerCase())}" aria-hidden="true"><span class="glyph-initials">${esc(letters(item.title) || 'T')}</span>${src && !failedIcons.has(src) ? `<img class="site-icon" src="${esc(src)}" alt="" referrerpolicy="no-referrer" loading="lazy" decoding="async"/>` : ''}</span>`;
+  };
+  // Capture image events: they do not bubble. Keep initials until decoding succeeds.
+  document.addEventListener('load', event => {
+    if (event.target.matches?.('.site-icon')) event.target.parentElement.classList.add('has-icon');
+  }, true);
+  document.addEventListener('error', event => {
+    if (!event.target.matches?.('.site-icon')) return;
+    failedIcons.add(event.target.src);
+    event.target.parentElement.classList.remove('has-icon');
+    event.target.remove();
+  }, true);
   let items = [], view = 'all', query = '', selectedIndex = 0, visibleResults = [], editing = null, toastTimer;
   const fallback = {
     async categories(){let categories;try{categories=JSON.parse(localStorage.getItem('cue-categories-v1'))}catch{}return resources.categories({categories,items:await this.list()})},
@@ -59,8 +73,8 @@
   }
   function card(item){return `<article class="tool-card" data-open="${esc(item.id)}" tabindex="0" role="button" aria-label="Open ${esc(item.title)}"><div class="tool-card-top">${glyph(item)}<div style="min-width:0"><div class="tool-name">${esc(item.title)}</div><div class="tool-domain">${esc(host(item.url))}</div></div></div><p class="tool-card-desc">${esc(item.purpose || 'Open this website in your browser.')}</p><div class="tool-card-foot"><span class="pack-tag">${esc(item.pack)}</span><span class="card-actions"><button class="card-icon-btn ${item.pinned?'is-pinned':''}" title="${item.pinned?'Unpin':'Pin'}" data-action="pin" data-id="${esc(item.id)}">${icon('icon-pin')}</button><button class="card-icon-btn" title="Edit" data-action="edit" data-id="${esc(item.id)}">${icon('icon-edit')}</button><span class="card-icon-btn card-open">${icon('icon-arrow')}</span></span></div></article>`}
   function grid(these){return `<div class="tool-grid">${these.map(card).join('')}</div>`}
-  function quickTile(item){return `<div class="quick-tile" data-open="${esc(item.id)}" tabindex="0" role="button" aria-label="Open ${esc(item.title)}">${glyph(item)}<div class="quick-tile-main"><div class="tool-name">${esc(item.title)}</div><div class="quick-purpose">${esc(item.purpose||host(item.url))}</div></div>${icon('icon-arrow','quick-arrow')}</div>`}
-  function recentRow(item){return `<div class="recent-item" data-open="${esc(item.id)}" tabindex="0" role="button">${glyph(item)}<div><div class="recent-name">${esc(item.title)}</div><div class="recent-detail">${esc(item.purpose||host(item.url))}</div></div><span class="recent-arrow">${icon('icon-arrow')}</span></div>`}
+  function quickTile(item){return `<div class="quick-tile" data-open="${esc(item.id)}" tabindex="0" role="button" aria-label="Open ${esc(item.title)}">${glyph(item)}<div class="quick-tile-main"><div class="tool-name">${esc(item.title)}</div><div class="quick-domain">${esc(host(item.url))}</div><div class="quick-purpose">${esc(item.purpose||'Open this website in your browser.')}</div></div><span class="quick-open">${icon('icon-arrow','quick-arrow')}</span></div>`}
+  function recentRow(item){return `<div class="recent-item" data-open="${esc(item.id)}" tabindex="0" role="button" aria-label="Open ${esc(item.title)}">${glyph(item)}<div class="recent-copy"><div class="recent-heading"><span class="recent-name">${esc(item.title)}</span><span class="recent-domain">${esc(host(item.url))}</span></div><div class="recent-detail">${esc(item.purpose||'Open this website in your browser.')}</div></div><span class="recent-arrow">${icon('icon-arrow')}</span></div>`}
   function empty(title,desc,action='Add your first resource'){return `<div class="empty-state"><div class="empty-icon">${icon('icon-search')}</div><strong>${esc(title)}</strong><p>${esc(desc)}</p><button data-action="add">${esc(action)}</button></div>`}
   function resultRow(item,index){return `<div class="result-row ${index===selectedIndex?'active':''}" data-open="${esc(item.id)}" tabindex="0" role="button">${glyph(item)}<div class="result-main"><div class="result-name">${esc(item.title)}</div><div class="result-purpose">${esc(item.purpose||'Open this website in your browser')}</div><div class="result-domain">${esc(host(item.url))} <span style="padding:0 5px;color:#4b605b">·</span> ${esc(item.pack)}</div></div><span class="result-actions"><button class="card-icon-btn ${item.pinned?'is-pinned':''}" data-action="pin" data-id="${esc(item.id)}" title="Pin/unpin">${icon('icon-pin')}</button><button class="card-icon-btn" data-action="edit" data-id="${esc(item.id)}" title="Edit">${icon('icon-edit')}</button><button class="card-icon-btn" data-action="delete" data-id="${esc(item.id)}" title="Delete">${icon('icon-trash')}</button><button class="result-open-btn" data-action="open" data-id="${esc(item.id)}">Open ${icon('icon-arrow')}</button></span></div>`}
   function renderSearch(){

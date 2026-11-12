@@ -32,3 +32,14 @@ test('URLs normalize consistently and default titles need no network', () => {
   assert.equal(resources.titleFromUrl('https://www.example.com/docs'), 'example.com');
   for (const value of ['', 'hello world', 'javascript:alert(1)', 'file:///tmp/a', 'https://user:pass@example.com']) assert.throws(()=>resources.normalizeUrl(value));
 });
+
+test('favicon requests send only public hostnames, never saved paths or credentials', () => {
+  const icon = new URL(resources.faviconUrl('https://dribbble.com/private?token=secret#section'));
+  assert.equal(icon.origin, 'https://www.google.com');
+  assert.equal(icon.searchParams.get('domain'), 'dribbble.com');
+  assert.equal(icon.searchParams.get('sz'), '64');
+  assert.ok(!icon.href.includes('secret'));
+  for (const url of ['http://localhost:3000', 'http://127.0.0.1', 'http://192.168.1.1', 'http://[::1]', 'http://dev.local', 'http://docs.internal', 'javascript:alert(1)', 'https://user:pass@example.com']) {
+    assert.equal(resources.faviconUrl(url), '', url);
+  }
+});

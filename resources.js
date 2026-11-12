@@ -38,7 +38,15 @@
   function titleFromUrl(value) {
     try { return new URL(normalizeUrl(value)).hostname.replace(/^www\./, ''); } catch { return ''; }
   }
-  const api = {categories, saveCategory, normalizeUrl, titleFromUrl};
+  function faviconUrl(value) {
+    try {
+      const hostname = new URL(normalizeUrl(value)).hostname;
+      // Local and private addresses should never be sent to an icon provider.
+      if (!hostname.includes('.') || hostname.includes(':') || /^\[|^[\d.]+$/.test(hostname) || /\.(localhost|local|internal|test|invalid)$/i.test(hostname)) return '';
+      return `https://www.google.com/s2/favicons?domain=${encodeURIComponent(hostname)}&sz=64`;
+    } catch { return ''; }
+  }
+  const api = {categories, saveCategory, normalizeUrl, titleFromUrl, faviconUrl};
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else root.CueResources = api;
 })(typeof window === 'undefined' ? globalThis : window);

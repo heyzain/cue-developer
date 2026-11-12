@@ -11,6 +11,7 @@ The current baseline is version **0.3.0**, with a warm, cream-colored editorial 
 - Create and rename categories; existing links follow category renames. Design, Assets, and Build are starting defaults, while Other holds resources without a category.
 - Save with only a URL: the domain fills the editable resource name. Purpose, search keywords, and category are optional.
 - Browse pinned and recently used tools, or open up to eight tools from a pack.
+- Automatically show website favicons in cards, recent links, and search, with initials when icons are unavailable.
 - Import and export JSON backups; imports merge links by URL.
 - Keep Cue open after launching a website, or hide it using a saved preference.
 - Access Cue from the taskbar, system tray, or global shortcut.
@@ -57,6 +58,8 @@ Desktop data is stored in `cue-data.json` inside Electron's `app.getPath('userDa
 Updating the source folder keeps saved tools when the app identity and user-data path stay the same. Export important links before changing either. Import merges resources and categories without replacing existing URLs; it does not restore exported preferences. Empty custom categories are included in backups.
 
 Opening `index.html` directly provides a browser preview using separate `localStorage`. It does not share desktop data or provide desktop window controls, global shortcuts, or tray integration. Everyday storage requires no account or cloud service; opening tools uses your browser and internet connection.
+
+Website icons load from Google's favicon service using only the website hostname, without the saved URL's path, query, or fragment. Private IP addresses and local hostnames use initials. Images use the browser's normal HTTP cache; offline or failed requests keep the initials fallback. No icon data is added to your backups.
 
 ## Build for Windows
 

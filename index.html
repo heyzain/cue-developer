@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>Cue · Developer tool launcher</title><link rel="stylesheet" href="styles.css"/></head>
+<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>Cue · Developer tool launcher</title><link rel="icon" href="assets/cue.ico"/><link rel="apple-touch-icon" href="assets/favicon_io/apple-touch-icon.png"/><link rel="stylesheet" href="styles.css"/></head>
 <body>
 <svg class="svg-store" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
 <symbol id="icon-image" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="8.5" cy="9" r="1.5"/><path d="m4 18 5-5 4 4 3-3 5 5"/></symbol>
@@ -29,7 +29,7 @@
 <div id="app" class="app-shell">
  <div class="main-layout">
   <aside class="sidebar">
-   <div class="sidebar-brand drag-region"><span class="brand-mark">C</span><span class="brand-name">cue<span class="brand-dot">.</span></span><span class="brand-detail">DEV TOOLBOX</span></div>
+   <div class="sidebar-brand drag-region"><img class="brand-mark" src="assets/cue-128.png" width="35" height="35" alt=""/><span class="brand-name">cue<span class="brand-dot">.</span></span><span class="brand-detail">DEV TOOLBOX</span></div>
    <nav id="main-nav" aria-label="Main navigation">
     <button type="button" class="nav-item selected" data-view="all"><svg><use href="#icon-folder"/></svg><span>Home</span></button>
     <button type="button" class="nav-item" data-view="discover"><svg><use href="#icon-search"/></svg><span>All resources</span></button>
@@ -45,7 +45,7 @@
    </nav>
    <button class="inspiration-note" id="sidebar-discover"><span class="note-symbol">✦</span><strong>Good ideas start here.</strong><small>Explore your toolkit <svg><use href="#icon-arrow"/></svg></small></button>
    <div class="sidebar-spacer"></div>
-   <div class="sidebar-footer"><span class="workspace-avatar">C</span><span class="workspace-name"><strong>My workspace</strong><small>Local · private · yours</small></span><button id="import-button" class="footer-icon" title="Import Cue backup" aria-label="Import backup"><svg><use href="#icon-upload"/></svg></button><button id="export-button" class="footer-icon" title="Export Cue backup" aria-label="Export backup"><svg><use href="#icon-download"/></svg></button></div>
+   <div class="sidebar-footer"><img class="workspace-avatar" src="assets/cue-64.png" width="30" height="30" alt=""/><span class="workspace-name"><strong>My workspace</strong><small>Local · private · yours</small></span><button id="import-button" class="footer-icon" title="Import Cue backup" aria-label="Import backup"><svg><use href="#icon-upload"/></svg></button><button id="export-button" class="footer-icon" title="Export Cue backup" aria-label="Export backup"><svg><use href="#icon-download"/></svg></button></div>
   </aside>
   <main class="content">
    <header class="topbar drag-region">
