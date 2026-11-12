@@ -1,0 +1,30 @@
+# Dependencies and generated builds
+node_modules/
+release/
+dist/
+coverage/
+
+# Logs and temporary files
+*.log
+*.tmp
+*.tsbuildinfo
+
+# Local secrets and credentials
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+
+# Local app data and exported backups
+cue-data.json
+cue-backup*.json
+
+# Editor and operating-system files
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+Desktop.ini

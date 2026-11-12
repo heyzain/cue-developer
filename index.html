@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>Cue · Developer tool launcher</title><link rel="stylesheet" href="styles.css"/></head>
+<body>
+<svg class="svg-store" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+<symbol id="icon-image" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="8.5" cy="9" r="1.5"/><path d="m4 18 5-5 4 4 3-3 5 5"/></symbol>
+<symbol id="icon-box" viewBox="0 0 24 24"><path d="m12 2 9 5-9 5-9-5 9-5ZM3 7v10l9 5 9-5V7M12 12v10"/></symbol>
+<symbol id="icon-search" viewBox="0 0 24 24"><circle cx="10.8" cy="10.8" r="6.5"/><path d="m16 16 4.6 4.6"/></symbol>
+<symbol id="icon-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+<symbol id="icon-arrow" viewBox="0 0 24 24"><path d="M7 17 17 7M8 7h9v9"/></symbol>
+<symbol id="icon-pin" viewBox="0 0 24 24"><path d="m16 3 5 5-3 1-3 3v4l-2 2-6-6 2-2h4l3-3zM7 17l-4 4"/></symbol>
+<symbol id="icon-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l4 2"/></symbol>
+<symbol id="icon-squares" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.6"/><rect x="14" y="3" width="7" height="7" rx="1.6"/><rect x="3" y="14" width="7" height="7" rx="1.6"/><rect x="14" y="14" width="7" height="7" rx="1.6"/></symbol>
+<symbol id="icon-spark" viewBox="0 0 24 24"><path d="m12 2 2.2 7.8L22 12l-7.8 2.2L12 22l-2.2-7.8L2 12l7.8-2.2z"/></symbol>
+<symbol id="icon-chevron" viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></symbol>
+<symbol id="icon-minimize" viewBox="0 0 24 24"><path d="M5 17h14"/></symbol>
+<symbol id="icon-tray" viewBox="0 0 24 24"><path d="M4 16v4h16v-4M12 3v12m-5-5 5 5 5-5"/></symbol>
+<symbol id="icon-close" viewBox="0 0 24 24"><path d="M6 6 18 18M18 6 6 18"/></symbol>
+<symbol id="icon-edit" viewBox="0 0 24 24"><path d="m4 16-.8 4.8L8 20l11-11-4-4L4 16zM13 7l4 4"/></symbol>
+<symbol id="icon-trash" viewBox="0 0 24 24"><path d="M4 7h16M9 7V4h6v3m3 0-1 13H7L6 7m4 4v6m4-6v6"/></symbol>
+<symbol id="icon-clipboard" viewBox="0 0 24 24"><rect x="5" y="5" width="14" height="16" rx="2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 12h6M9 16h4"/></symbol>
+<symbol id="icon-download" viewBox="0 0 24 24"><path d="M12 3v12m-5-5 5 5 5-5M5 17v4h14v-4"/></symbol>
+<symbol id="icon-upload" viewBox="0 0 24 24"><path d="M12 17V5m-5 5 5-5 5 5M5 17v4h14v-4"/></symbol>
+<symbol id="icon-settings" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="m9.5 2-.5 2.2-2 .9-2-.9-2 3.6 1.6 1.6-.2 2.2-1.7 1.4 2 3.6 2.1-.7 1.8 1.2.2 2.2h4l.5-2.2 2-.9 2 .9 2-3.6-1.6-1.6.2-2.2 1.7-1.4-2-3.6-2.1.7-1.8-1.2-.2-2.2z" transform="translate(0 1) scale(.95)"/></symbol>
+<symbol id="icon-check" viewBox="0 0 24 24"><path d="m5 12 4.2 4.2L19 6.5"/></symbol>
+<symbol id="icon-back" viewBox="0 0 24 24"><path d="m15 6-6 6 6 6"/></symbol>
+<symbol id="icon-bolt" viewBox="0 0 24 24"><path d="m13 2-9 12h7l-1 8 10-13h-7z"/></symbol>
+<symbol id="icon-folder" viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h5l2 2h7a2 2 0 0 1 2 2v10H3z"/></symbol>
+</svg>
+<div id="app" class="app-shell">
+ <div class="main-layout">
+  <aside class="sidebar">
+   <div class="sidebar-brand drag-region"><span class="brand-mark">C</span><span class="brand-name">cue<span class="brand-dot">.</span></span><span class="brand-detail">DEV TOOLBOX</span></div>
+   <nav id="main-nav" aria-label="Main navigation">
+    <button type="button" class="nav-item selected" data-view="all"><svg><use href="#icon-folder"/></svg><span>Home</span></button>
+    <button type="button" class="nav-item" data-view="discover"><svg><use href="#icon-search"/></svg><span>Discover</span></button>
+    <button type="button" class="nav-item" data-view="pinned"><svg><use href="#icon-pin"/></svg><span>Pinned tools</span><span id="pin-count" class="nav-count"></span></button>
+    <button type="button" class="nav-item" data-view="recent"><svg><use href="#icon-clock"/></svg><span>Recently used</span></button>
+   </nav>
+   <div class="sidebar-section-head"><span>Task packs</span><button class="tiny-add" id="sidebar-add" title="Add a tool">+</button></div>
+   <nav id="pack-nav" aria-label="Task packs">
+    <button type="button" class="pack-nav-item" data-view="Design"><span class="pack-dot design"></span>Design <span class="pack-nav-count" data-pack-count="Design"></span></button>
+    <button type="button" class="pack-nav-item" data-view="Assets"><span class="pack-dot assets"></span>Assets <span class="pack-nav-count" data-pack-count="Assets"></span></button>
+    <button type="button" class="pack-nav-item" data-view="Build"><span class="pack-dot build"></span>Build <span class="pack-nav-count" data-pack-count="Build"></span></button>
+    <button type="button" class="pack-nav-item" data-view="Other"><span class="pack-dot other"></span>Other <span class="pack-nav-count" data-pack-count="Other"></span></button>
+   </nav>
+   <button class="inspiration-note" id="sidebar-discover"><span class="note-symbol">✦</span><strong>Good ideas start here.</strong><small>Explore your toolkit <svg><use href="#icon-arrow"/></svg></small></button>
+   <div class="sidebar-spacer"></div>
+   <div class="sidebar-footer"><span class="workspace-avatar">C</span><span class="workspace-name"><strong>My workspace</strong><small>Local · private · yours</small></span><button id="import-button" class="footer-icon" title="Import Cue backup" aria-label="Import backup"><svg><use href="#icon-upload"/></svg></button><button id="export-button" class="footer-icon" title="Export Cue backup" aria-label="Export backup"><svg><use href="#icon-download"/></svg></button></div>
+  </aside>
+  <main class="content">
+   <header class="topbar drag-region">
+    <div class="search-wrap no-drag"><svg class="search-leading"><use href="#icon-search"/></svg><input id="search-input" autocomplete="off" spellcheck="false" placeholder="Search tools, tasks, or anything..." aria-label="Search your tools by task"/><button id="search-clear" title="Clear search" class="search-clear hidden"><svg><use href="#icon-close"/></svg></button><span class="search-shortcut">Ctrl K</span></div>
+    <div class="topbar-actions no-drag"><button id="add-floating" class="topbar-save" title="Save a tool (Ctrl+N)"><svg><use href="#icon-plus"/></svg><span>New tool</span></button><div class="window-controls"><button type="button" class="icon-button" id="minimize-button" title="Minimize to taskbar" aria-label="Minimize"><svg><use href="#icon-minimize"/></svg></button><button type="button" class="icon-button" id="tray-button" title="Hide to tray" aria-label="Hide to tray"><svg><use href="#icon-tray"/></svg></button><button type="button" class="icon-button window-close" id="hide-button" title="Close to tray" aria-label="Close to tray"><svg><use href="#icon-close"/></svg></button></div></div>
+   </header>
+   <div class="content-scroll" id="content-scroll"><div id="content-body"></div></div>
+   <div class="bottom-bar"><label class="keep-open-option" title="When enabled, Cue remains visible after opening a website"><input type="checkbox" id="keep-open-toggle" checked/><span class="switch-track" aria-hidden="true"><span></span></span><span>Keep Cue open after launch</span></label><span class="key-help">Ctrl + Shift + Space · summon Cue <span class="bottom-divider">·</span> Esc · hide</span></div>
+  </main>
+ </div>
+</div>
+<div id="modal-layer" class="modal-layer hidden" aria-hidden="true">
+  <div class="modal-overlay" data-close></div>
+  <section class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-heading">
+    <div class="modal-heading"><span class="modal-eyebrow">YOUR PERSONAL TOOLBOX</span><button type="button" class="icon-button" id="modal-close" aria-label="Close"><svg><use href="#icon-close"/></svg></button></div>
+    <h2 id="modal-heading">Save a useful tool<span class="accent">.</span></h2>
+    <p class="modal-subtitle">Give it a purpose you'll remember. That's the whole trick.</p>
+    <form id="tool-form"><input type="hidden" id="tool-id"/><label for="tool-url">WEBSITE URL <span class="required">*</span></label><div class="url-line"><input id="tool-url" type="text" placeholder="https://example.com" required/><button type="button" id="paste-url" class="paste-btn"><svg><use href="#icon-clipboard"/></svg> Paste</button></div>
+    <label for="tool-title">TOOL NAME <span class="muted">optional</span></label><input id="tool-title" placeholder="e.g. Dribbble" maxlength="100"/>
+    <label for="tool-purpose">WHAT WOULD YOU USE THIS FOR?</label><input id="tool-purpose" placeholder="e.g. Find dashboard UI inspiration" maxlength="240"/>
+    <div class="form-row"><div><label for="tool-pack">TASK PACK</label><select id="tool-pack"><option>Design</option><option>Assets</option><option>Build</option><option>Other</option></select></div><div><label for="tool-keywords">OTHER SEARCH WORDS <span class="muted">optional</span></label><input id="tool-keywords" placeholder="png, svg, vector, logo" maxlength="280"/></div></div>
+    <label class="pin-check"><input type="checkbox" id="tool-pinned"/><span class="check-ui"><svg><use href="#icon-check"/></svg></span><span>Keep this tool pinned for quick access</span></label>
+    <div class="modal-actions"><button type="button" class="btn-secondary" id="modal-cancel">Cancel</button><button type="submit" class="btn-primary"><svg><use href="#icon-plus"/></svg><span id="save-label">Save tool</span></button></div></form>
+  </section>
+</div>
+<div id="toast" class="toast" role="status"></div>
+<script src="seed.js"></script><script src="renderer.js"></script>
+</body></html>

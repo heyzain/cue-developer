@@ -1,0 +1,97 @@
+# Cue Developer
+
+Cue is a local-first desktop launcher for developer tools and websites. Save links with a description of what you use them for, then search by task, name, keyword, or category to open the right tool in your default browser.
+
+The current baseline is version **0.3.0**, with a warm, cream-colored editorial interface. It was initially generated with ChatGPT and is being developed further to fit a personal workflow.
+
+## Features
+
+- Save, edit, delete, and pin tools.
+- Search names, purposes, keywords, domains, and categories.
+- Organize tools into Design, Assets, Build, and Other task packs.
+- Browse pinned and recently used tools, or open up to eight tools from a pack.
+- Import and export JSON backups; imports merge links by URL.
+- Keep Cue open after launching a website, or hide it using a saved preference.
+- Access Cue from the taskbar, system tray, or global shortcut.
+- Start with nine editable example tools, including Dribbble, Lucide, Squoosh, and MDN Web Docs.
+
+## Run locally
+
+Install Node.js LTS and npm, then run:
+
+```sh
+git clone https://github.com/heyzain/cue-developer.git
+cd cue-developer
+npm ci
+npm start
+```
+
+For developer tools alongside the app:
+
+```sh
+npm run dev
+```
+
+On Windows, you can also double-click `run-windows.cmd`. It installs dependencies and downloads the Electron runtime if missing, then starts Cue with a terminal attached. Startup output is saved to `cue-launch.log`. Closing the terminal can stop the app.
+
+## Keyboard and window controls
+
+| Shortcut or control | Action |
+| --- | --- |
+| Ctrl + Shift + Space | Show Cue, or hide it when focused |
+| Ctrl + Alt + Space | Fallback if the primary global shortcut is unavailable |
+| Ctrl + K or / | Focus search |
+| Ctrl + N | Open Save Tool, using a valid clipboard URL when available |
+| Up / Down, then Enter | Select and open a search result |
+| Esc | Close the modal, clear search, or hide Cue |
+| Minimize | Minimize to the taskbar |
+| Tray or Close button | Hide to the system tray |
+
+To exit, right-click the tray icon and select **Quit Cue completely**. If both global shortcuts are unavailable, use the taskbar or tray.
+
+## Data and backups
+
+Desktop data is stored in `cue-data.json` inside Electron's `app.getPath('userData')` directory, outside this repository. On Windows this is normally under `%APPDATA%`; the exact folder depends on the application identity and how Cue is launched.
+
+Updating the source folder keeps saved tools when the app identity and user-data path stay the same. Export important links before changing either. Import merges tools without replacing existing URLs; it does not restore exported preferences.
+
+Opening `index.html` directly provides a browser preview using separate `localStorage`. It does not share desktop data or provide desktop window controls, global shortcuts, or tray integration. Everyday storage requires no account or cloud service; opening tools uses your browser and internet connection.
+
+## Build for Windows
+
+```sh
+# Portable executable
+npm run dist:portable
+
+# NSIS installer
+npm run dist:win
+```
+
+Build output goes to `release/`. `build-windows.cmd` installs dependencies and builds the portable executable. The current build configuration targets Windows; macOS and Linux packaging has not been configured or verified. Builds are unsigned.
+
+## Project structure
+
+| Path | Purpose |
+| --- | --- |
+| `main.js` | Electron window, tray, shortcuts, local storage, and IPC handlers |
+| `preload.js` | Restricted bridge between the renderer and Electron |
+| `index.html` | App shell, forms, and inline SVG symbols |
+| `renderer.js` | Interface behavior, search, and browser-preview storage |
+| `styles.css` | App styling and responsive layout |
+| `seed.js` | Default example tools |
+| `assets/` | Icons and decorative images from the generated design concept |
+| `scripts/launch.cjs` | Windows startup and diagnostic logging |
+
+## Development checks
+
+There is currently no automated test suite. Check JavaScript syntax before committing:
+
+```sh
+node --check main.js
+node --check preload.js
+node --check renderer.js
+node --check seed.js
+node --check scripts/launch.cjs
+```
+
+For desktop changes, manually verify startup, saving and searching links, import/export, browser launches, minimize, tray reopening, and global shortcuts. Login startup is not implemented.
