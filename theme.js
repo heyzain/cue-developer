@@ -14,7 +14,7 @@
     button.setAttribute('aria-pressed', String(dark));
     button.setAttribute('aria-label', dark ? 'Switch to light theme' : 'Switch to dark theme');
     button.title = dark ? 'Switch to light theme' : 'Switch to dark theme';
-    button.querySelector('use').setAttribute('href', dark ? '#icon-sun' : '#icon-moon');
+    button.querySelector('.ui-icon').style.setProperty('--icon-url', `url('assets/icons/${dark ? 'sun' : 'moon'}.svg')`);
   }
   apply(explicit ? saved : system.matches ? 'dark' : 'light');
   system.addEventListener('change', event => {

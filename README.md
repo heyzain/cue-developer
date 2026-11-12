@@ -88,6 +88,10 @@ Build output goes to `release/`. `build-windows.cmd` installs dependencies and b
 | `assets/` | Icons and decorative images from the generated design concept |
 | `scripts/launch.cjs` | Windows startup and diagnostic logging |
 
+## Replacing interface icons
+
+Replace SVG files in `assets/icons/` using the same filenames, then reload Cue. No code edits are needed. Existing files provide a complete starting set; `folder.svg` is the custom Figma export. Export with a transparent background and a consistent 24 × 24 viewBox. Icons use SVG alpha masks: the interface supplies the color for light/dark themes and hover states, while SVG opacity preserves duotone shading. Solid multicolor fills become one interface color; express the secondary tone using opacity. Website favicons and the Cue logo are separate assets. For a packaged installation, replace icons in the source and rebuild.
+
 ## Development checks
 
 Run `npm test` for category migration, rename, validation, and URL normalization checks. Run `npm run test:ui` for an isolated Electron renderer smoke test (uses temporary data, never your saved links). The UI test requires a working local Electron runtime and Windows sandbox permissions.

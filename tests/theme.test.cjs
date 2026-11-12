@@ -11,7 +11,7 @@ function setup({saved=null, systemDark=false, blocked=false}={}) {
   const root = {dataset:{}};
   const button = {
     setAttribute:(name,value)=>{attributes[name]=value},
-    querySelector:()=>({setAttribute:(name,value)=>{attributes.icon=value}}),
+    querySelector:()=>({style:{setProperty:(name,value)=>{attributes.icon=value}}}),
     addEventListener:(name,callback)=>{events[name]=callback}
   };
   vm.runInNewContext(source, {
@@ -30,7 +30,7 @@ test('saved theme applies before DOM ready and toggle persists the next choice',
   assert.equal(app.root.dataset.theme, 'dark');
   app.events.ready();
   assert.equal(app.attributes['aria-pressed'], 'true');
-  assert.equal(app.attributes.icon, '#icon-sun');
+  assert.equal(app.attributes.icon, "url('assets/icons/sun.svg')");
   app.events.click();
   assert.equal(app.root.dataset.theme, 'light');
   assert.equal(app.storage.get('cue-theme-v1'), 'light');

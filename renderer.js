@@ -10,7 +10,7 @@
   const PACK_DESC = {Design:'Inspiration, layouts & icons',Assets:'Optimize, convert & export',Build:'Docs, testing & debugging',Other:'Everything else, one place'};
   const ESCAPE = {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'};
   const esc = s => String(s ?? '').replace(/[&<>"']/g, c=>ESCAPE[c]);
-  const icon = (name, cls='') => `<svg class="${cls}" aria-hidden="true"><use href="#${name}"/></svg>`;
+  const icon = (name, cls='') => `<span class="ui-icon ${cls}" style="--icon-url:url('assets/icons/${name.replace(/^icon-/, '')}.svg')" aria-hidden="true"></span>`;
   const host = url => {try {return new URL(url).hostname.replace(/^www\./,'');}catch{return ''}};
   const isUrl = text => {try { resources.normalizeUrl(text); return true; } catch { return false; }};
   const safeUrl = resources.normalizeUrl;
