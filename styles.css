@@ -3,6 +3,7 @@
   --paper:#fcf8f4;--sidebar:#faf4f0;--surface:#fffdfa;--border:#e9ddd5;
   --text:#282421;--muted:#8c7e78;--sub:#665a55;--accent:#ac775b;
   --focus:#ab8068;--rose:#ff929a;--green:#76c989;--blue:#619ded;
+  --motion-fast:160ms;--motion-card:220ms;--motion-ease:cubic-bezier(.2,.65,.3,1);
   font-family:'Segoe UI Variable','Segoe UI',Arial,sans-serif;
 }
 *{box-sizing:border-box}
@@ -94,7 +95,7 @@ svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.8;stroke
 .url-line{display:flex;gap:8px}.url-line input{min-width:0;flex:1}.paste-btn{border:1px solid #e5d3c6;border-radius:9px;background:#f8eee7;display:flex;align-items:center;gap:6px;padding:0 12px;font-size:11px}.paste-btn svg{width:14px;height:14px}.form-row{display:grid;grid-template-columns:36% 1fr;gap:12px}
 .pin-check{display:flex;align-items:center;gap:8px;font-size:12px;margin:19px 0 0;color:#63554d;cursor:pointer}.pin-check input{position:absolute;opacity:0}.check-ui{width:18px;height:18px;border:1px solid #d7bca8;border-radius:5px;display:grid;place-items:center}.check-ui svg{height:14px;width:14px;opacity:0}.pin-check input:checked+.check-ui{background:#ad7656;color:#fff}.pin-check input:checked+.check-ui svg{opacity:1}.pin-check input:focus-visible+.check-ui{outline:2px solid #ad7656}
 .modal-actions{border-top:1px solid #ebded5;margin-top:24px;padding-top:19px;display:flex;justify-content:flex-end;gap:9px}.btn-secondary,.btn-primary{border-radius:9px;height:38px;padding:0 16px;font-size:12px;font-weight:690}.btn-secondary{background:#f4eae3;border:1px solid #e3d2c6}.btn-primary{background:#292522;border:0;color:white;display:flex;align-items:center;gap:7px}.btn-primary svg{height:14px;width:14px}
-.toast{position:fixed;bottom:60px;left:50%;transform:translate(-50%,12px);opacity:0;pointer-events:none;transition:all .2s;z-index:90;border-radius:11px;background:#2c2622;color:white;padding:12px 17px;font-size:12px;box-shadow:0 11px 32px #49352b44}.toast.show{opacity:1;transform:translate(-50%,0)}
+.toast{position:fixed;bottom:60px;left:50%;transform:translate(-50%,12px);opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;z-index:90;border-radius:11px;background:#2c2622;color:white;padding:12px 17px;font-size:12px;box-shadow:0 11px 32px #49352b44}.toast.show{opacity:1;transform:translate(-50%,0)}
 @media(max-width:1100px){.sidebar{width:205px;padding-inline:13px}.topbar{padding-inline:24px;gap:10px}.hero-art{width:46%}.hero h1{font-size:49px}.action-grid{gap:8px}.action-tile{padding:14px 11px;font-size:11px}.pack-cards{gap:10px}.content-scroll{padding-inline:24px}}
 @media(max-width:850px){.sidebar{width:173px}.sidebar-brand{gap:4px}.brand-name{font-size:24px}.workspace-name small{display:none}.sidebar-footer{gap:3px}.topbar{padding-inline:14px}.topbar-save{height:40px;padding-inline:11px}.topbar-save span{display:none}.window-controls{padding-left:4px}.window-controls .icon-button{width:23px}.content-scroll{padding-inline:17px}.hero h1{font-size:39px;letter-spacing:-1.5px}.hero-art{opacity:.65}.action-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.action-tile{min-height:66px}.pack-cover{height:70px}.pack-card-copy strong{font-size:14px}.pack-card-body{padding:9px}.pack-card-copy small{font-size:10px}.key-help{display:none}.bottom-bar{justify-content:flex-start}}
 @media(max-height:740px){.sidebar{padding-top:10px}.sidebar-brand{height:60px}.sidebar-section-head{margin-top:12px;padding-top:14px}.inspiration-note{margin-top:15px}.content-scroll{padding-top:0}.hero{height:214px}.hero h1{font-size:45px}.actions-section{margin-bottom:16px}.action-tile{min-height:73px}.pack-cover{height:75px}.pack-card-body{min-height:64px}}
@@ -127,3 +128,26 @@ svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.8;stroke
 .section-header{margin-bottom:14px}
 .reach-section{margin-top:21px}
 @media(max-width:850px){.hero{height:150px}.hero h1{font-size:36px;letter-spacing:-1.5px}.hero-art{opacity:.75}.pack-cover{height:68px}.action-tile{min-height:66px}}
+
+/* Define transitions on resting states so hover entry and exit both ease. */
+:where(button,.quick-tile,.tool-card,.result-row,.search-wrap,.recent-name,.switch-track,.check-ui,input,select){
+  transition:background-color var(--motion-fast) var(--motion-ease),
+    border-color var(--motion-fast) var(--motion-ease),
+    color var(--motion-fast) var(--motion-ease),
+    box-shadow var(--motion-fast) var(--motion-ease);
+}
+.action-tile,.pack-card{
+  transition:transform var(--motion-card) var(--motion-ease),
+    background-color var(--motion-fast) var(--motion-ease),
+    border-color var(--motion-fast) var(--motion-ease),
+    box-shadow var(--motion-card) var(--motion-ease);
+}
+.action-tile:active,.pack-card:active{transform:translateY(0)}
+.switch-track>span{transition:transform var(--motion-fast) var(--motion-ease)}
+.check-ui svg{transition:opacity var(--motion-fast) var(--motion-ease)}
+
+@media(prefers-reduced-motion:reduce){
+  :root{--motion-fast:0s;--motion-card:0s}
+  .action-tile:hover,.pack-card:hover{transform:none}
+  .toast{transition:none}
+}
