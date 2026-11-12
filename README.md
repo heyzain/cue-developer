@@ -12,6 +12,7 @@ The current baseline is version **0.3.0**, with a warm, cream-colored editorial 
 - Save with only a URL: the domain fills the editable resource name. Purpose, search keywords, and category are optional.
 - Browse pinned and recently used tools, or open up to eight tools from a pack.
 - Automatically show website favicons in cards, recent links, and search, with initials when icons are unavailable.
+- Switch between light and neutral charcoal dark themes using the sun/moon button. Dark mode keeps Cue's warm clay accent. Your choice is remembered on the device; until you choose, the theme follows your system.
 - Import and export JSON backups; imports merge links by URL.
 - Keep Cue open after launching a website, or hide it using a saved preference.
 - Access Cue from the taskbar, system tray, or global shortcut.

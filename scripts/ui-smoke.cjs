@@ -16,6 +16,9 @@ app.whenReady().then(async()=>{
     await wait();
     check($('#content-body .hero'),'Home renders');
     check(getComputedStyle($('.hero')).height==='160px','Accepted compact hero');
+    if(document.documentElement.dataset.theme!=='dark')$('#theme-toggle').click();
+    check(getComputedStyle(document.body).backgroundColor==='rgb(23, 23, 23)','Neutral charcoal theme');
+    check($('#theme-toggle').getAttribute('aria-pressed')==='true','Theme toggle announces its state');
     const mark=$('.quick-tile .site-icon');
     check(mark,'Pinned resources request a website icon');
     check(mark.referrerPolicy==='no-referrer','Icon requests omit the referrer');
@@ -32,6 +35,7 @@ app.whenReady().then(async()=>{
     $('[data-view="discover"]').click();
     check($('#content-body h1').textContent.includes('All resources'),'All resources navigation');
     $('#add-floating').click();await wait();
+    check(getComputedStyle($('#tool-url')).backgroundColor==='rgb(23, 23, 23)','Dark form inputs');
     $('#tool-url').value='example.com/article';$('#tool-url').dispatchEvent(new Event('input'));
     check($('#tool-title').value==='example.com','Automatic URL title');
     check($('#tool-pack').value==='Other','Category is optional');
@@ -57,6 +61,8 @@ app.whenReady().then(async()=>{
   await new Promise(r=>setTimeout(r,250));
   const persisted = await win.webContents.executeJavaScript(`document.querySelector('#pack-nav').textContent.includes('Articles')`);
   if(!persisted)throw Error('Categories did not survive reload');
+  const themePersisted = await win.webContents.executeJavaScript(`document.documentElement.dataset.theme==='dark'`);
+  if(!themePersisted)throw Error('Theme did not survive reload');
   console.log('Reload persistence passed');
   clearTimeout(timer);win.destroy();app.quit();
 }).catch(error=>{console.error(error);clearTimeout(timer);app.exit(1)});

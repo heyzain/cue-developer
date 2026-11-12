@@ -11,7 +11,7 @@
     "dev": "electron . --dev",
     "dist:win": "electron-builder --win nsis",
     "dist:portable": "electron-builder --win portable",
-    "test": "node tests/resources.test.cjs",
+    "test": "node tests/resources.test.cjs && node tests/theme.test.cjs",
     "test:ui": "electron scripts/ui-smoke.cjs"
   },
   "devDependencies": {
@@ -28,6 +28,7 @@
       "index.html",
       "styles.css",
       "renderer.js",
+      "theme.js",
       "seed.js",
       "assets/**/*",
       "package.json",
