@@ -71,12 +71,13 @@
       return {item,passes,score};
     }).filter(x=>x.passes).sort((a,b)=>b.score-a.score||byName(a.item,b.item)).map(x=>x.item);
   }
-  function card(item){return `<article class="tool-card" data-open="${esc(item.id)}" tabindex="0" role="button" aria-label="Open ${esc(item.title)}"><div class="tool-card-top">${glyph(item)}<div style="min-width:0"><div class="tool-name">${esc(item.title)}</div><div class="tool-domain">${esc(host(item.url))}</div></div></div><p class="tool-card-desc">${esc(item.purpose || 'Open this website in your browser.')}</p><div class="tool-card-foot"><span class="pack-tag">${esc(item.pack)}</span><span class="card-actions"><button class="card-icon-btn ${item.pinned?'is-pinned':''}" title="${item.pinned?'Unpin':'Pin'}" data-action="pin" data-id="${esc(item.id)}">${icon('icon-pin')}</button><button class="card-icon-btn" title="Edit" data-action="edit" data-id="${esc(item.id)}">${icon('icon-edit')}</button><span class="card-icon-btn card-open">${icon('icon-arrow')}</span></span></div></article>`}
+  const deleteButton = item => `<button type="button" class="card-icon-btn delete-resource" data-action="delete" data-id="${esc(item.id)}" title="Delete resource" aria-label="Delete ${esc(item.title)}">${icon('icon-trash')}</button>`;
+  function card(item){return `<article class="tool-card" data-open="${esc(item.id)}" tabindex="0" role="button" aria-label="Open ${esc(item.title)}"><div class="tool-card-top">${glyph(item)}<div style="min-width:0"><div class="tool-name">${esc(item.title)}</div><div class="tool-domain">${esc(host(item.url))}</div></div></div><p class="tool-card-desc">${esc(item.purpose || 'Open this website in your browser.')}</p><div class="tool-card-foot"><span class="pack-tag">${esc(item.pack)}</span><span class="card-actions"><button class="card-icon-btn ${item.pinned?'is-pinned':''}" title="${item.pinned?'Unpin':'Pin'}" data-action="pin" data-id="${esc(item.id)}">${icon('icon-pin')}</button><button class="card-icon-btn" title="Edit" data-action="edit" data-id="${esc(item.id)}">${icon('icon-edit')}</button>${deleteButton(item)}<span class="card-icon-btn card-open">${icon('icon-arrow')}</span></span></div></article>`}
   function grid(these){return `<div class="tool-grid">${these.map(card).join('')}</div>`}
-  function quickTile(item){return `<div class="quick-tile" data-open="${esc(item.id)}" tabindex="0" role="button" aria-label="Open ${esc(item.title)}">${glyph(item)}<div class="quick-tile-main"><div class="tool-name">${esc(item.title)}</div><div class="quick-domain">${esc(host(item.url))}</div><div class="quick-purpose">${esc(item.purpose||'Open this website in your browser.')}</div></div><span class="quick-open">${icon('icon-arrow','quick-arrow')}</span></div>`}
-  function recentRow(item){return `<div class="recent-item" data-open="${esc(item.id)}" tabindex="0" role="button" aria-label="Open ${esc(item.title)}">${glyph(item)}<div class="recent-copy"><div class="recent-heading"><span class="recent-name">${esc(item.title)}</span><span class="recent-domain">${esc(host(item.url))}</span></div><div class="recent-detail">${esc(item.purpose||'Open this website in your browser.')}</div></div><span class="recent-arrow">${icon('icon-arrow')}</span></div>`}
+  function quickTile(item){return `<div class="quick-tile" data-open="${esc(item.id)}" tabindex="0" role="button" aria-label="Open ${esc(item.title)}">${glyph(item)}<div class="quick-tile-main"><div class="tool-name">${esc(item.title)}</div><div class="quick-domain">${esc(host(item.url))}</div><div class="quick-purpose">${esc(item.purpose||'Open this website in your browser.')}</div></div>${deleteButton(item)}<span class="quick-open">${icon('icon-arrow','quick-arrow')}</span></div>`}
+  function recentRow(item){return `<div class="recent-item" data-open="${esc(item.id)}" tabindex="0" role="button" aria-label="Open ${esc(item.title)}">${glyph(item)}<div class="recent-copy"><div class="recent-heading"><span class="recent-name">${esc(item.title)}</span><span class="recent-domain">${esc(host(item.url))}</span></div><div class="recent-detail">${esc(item.purpose||'Open this website in your browser.')}</div></div>${deleteButton(item)}<span class="recent-arrow">${icon('icon-arrow')}</span></div>`}
   function empty(title,desc,action='Add your first resource'){return `<div class="empty-state"><div class="empty-icon">${icon('icon-search')}</div><strong>${esc(title)}</strong><p>${esc(desc)}</p><button data-action="add">${esc(action)}</button></div>`}
-  function resultRow(item,index){return `<div class="result-row ${index===selectedIndex?'active':''}" data-open="${esc(item.id)}" tabindex="0" role="button">${glyph(item)}<div class="result-main"><div class="result-name">${esc(item.title)}</div><div class="result-purpose">${esc(item.purpose||'Open this website in your browser')}</div><div class="result-domain">${esc(host(item.url))} <span style="padding:0 5px;color:#4b605b">·</span> ${esc(item.pack)}</div></div><span class="result-actions"><button class="card-icon-btn ${item.pinned?'is-pinned':''}" data-action="pin" data-id="${esc(item.id)}" title="Pin/unpin">${icon('icon-pin')}</button><button class="card-icon-btn" data-action="edit" data-id="${esc(item.id)}" title="Edit">${icon('icon-edit')}</button><button class="card-icon-btn" data-action="delete" data-id="${esc(item.id)}" title="Delete">${icon('icon-trash')}</button><button class="result-open-btn" data-action="open" data-id="${esc(item.id)}">Open ${icon('icon-arrow')}</button></span></div>`}
+  function resultRow(item,index){return `<div class="result-row ${index===selectedIndex?'active':''}" data-open="${esc(item.id)}" tabindex="0" role="button">${glyph(item)}<div class="result-main"><div class="result-name">${esc(item.title)}</div><div class="result-purpose">${esc(item.purpose||'Open this website in your browser')}</div><div class="result-domain">${esc(host(item.url))} <span style="padding:0 5px;color:#4b605b">·</span> ${esc(item.pack)}</div></div><span class="result-actions"><button class="card-icon-btn ${item.pinned?'is-pinned':''}" data-action="pin" data-id="${esc(item.id)}" title="Pin/unpin">${icon('icon-pin')}</button><button class="card-icon-btn" data-action="edit" data-id="${esc(item.id)}" title="Edit">${icon('icon-edit')}</button>${deleteButton(item)}<button class="result-open-btn" data-action="open" data-id="${esc(item.id)}">Open ${icon('icon-arrow')}</button></span></div>`}
   function renderSearch(){
     visibleResults=searchItems(query);
     const resultText=`${visibleResults.length} matching ${visibleResults.length===1?'resource':'resources'}`;
@@ -123,7 +124,26 @@
   async function refresh(){items=await api.list();PACKS=await api.categories();render()}
   async function openResource(id){try{items=await api.launch(id);render()}catch(e){showToast(e.message||'Could not open that link.')}}
   async function togglePin(id){const item=items.find(x=>x.id===id);if(!item)return;try{items=await api.upsert({...item,pinned:!item.pinned});render();showToast(`${item.title} ${item.pinned?'unpinned':'pinned'}.`)}catch(e){showToast(e.message)}}
-  async function removeResource(id){const item=items.find(x=>x.id===id);if(!item)return;if(!confirm(`Remove ${item.title} from Cue?`))return;try{items=await api.remove(id);render();showToast('Resource removed.')}catch(e){showToast(e.message)}}
+  let deleting = null, deleteFocus = null, deleteBusy = false;
+  function removeResource(id){
+    const item=items.find(x=>x.id===id);if(!item)return;
+    deleting=id;deleteFocus=document.activeElement;
+    $('#delete-resource-name').textContent=item.title;
+    $('#delete-dialog').showModal();$('#delete-cancel').focus();
+  }
+  $('#delete-cancel').addEventListener('click',()=>$('#delete-dialog').close());
+  $('#delete-dialog').addEventListener('cancel',event=>{if(deleteBusy)event.preventDefault()});
+  $('#delete-dialog').addEventListener('close',()=>{
+    deleting=null;
+    if(deleteFocus?.isConnected)deleteFocus.focus();else $('#search-input').focus();
+  });
+  $('#delete-form').addEventListener('submit',async event=>{
+    event.preventDefault();if(!deleting||deleteBusy)return;
+    deleteBusy=true;$('#delete-confirm').disabled=true;$('#delete-cancel').disabled=true;
+    try{items=await api.remove(deleting);render();$('#delete-dialog').close();showToast('Resource deleted.');}
+    catch(error){showToast(error.message||'Could not delete resource.');}
+    finally{deleteBusy=false;$('#delete-confirm').disabled=false;$('#delete-cancel').disabled=false;}
+  });
   let autoTitle='';
   function updateAutoTitle(){const input=$('#tool-title');if(!input.value||input.value===autoTitle){autoTitle=resources.titleFromUrl($('#tool-url').value);input.value=autoTitle;}}
   function openModal(item=null,clipboardText=''){
@@ -190,7 +210,7 @@
   $('#category-dialog').addEventListener('close',()=>{if(categoryFocus?.isConnected)categoryFocus.focus();else $('#sidebar-add').focus();});
   $('#category-form').addEventListener('submit',async e=>{e.preventDefault();try{const result=await api.saveCategory($('#category-name').value,categoryPrevious);if(view===categoryPrevious)view=$('#category-name').value.trim();PACKS=result.categories;items=result.items;render();$('#category-dialog').close();showToast(categoryPrevious?'Category renamed.':'Category created.');}catch(error){$('#category-error').textContent=error.message;}});
   document.addEventListener('keydown',e=>{
-    if($('#category-dialog').open)return;
+    if($('#category-dialog').open||$('#delete-dialog').open)return;
     const modalOpen=!$('#modal-layer').classList.contains('hidden');
     if(e.key==='Escape'){e.preventDefault();if(modalOpen)closeModal();else if(query)setSearch('');else api.hide();return;}
     if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='n'){e.preventDefault();if(!modalOpen)addFromClipboard();return;}

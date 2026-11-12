@@ -76,6 +76,9 @@
 <dialog id="category-dialog" class="category-dialog" aria-labelledby="category-heading">
  <form id="category-form"><h2 id="category-heading">New category</h2><label for="category-name">Category name</label><input id="category-name" required maxlength="40" autocomplete="off" placeholder="e.g. React or Reading"/><p id="category-error" role="alert"></p><div class="category-actions"><button type="button" id="category-cancel" class="btn-secondary">Cancel</button><button type="submit" class="btn-primary">Save category</button></div></form>
 </dialog>
+<dialog id="delete-dialog" class="category-dialog delete-dialog" aria-labelledby="delete-heading" aria-describedby="delete-description">
+ <form id="delete-form"><h2 id="delete-heading">Delete resource?</h2><p id="delete-description">Remove <strong id="delete-resource-name"></strong> from your saved resources? This cannot be undone.</p><div class="category-actions"><button type="button" id="delete-cancel" class="btn-secondary">Cancel</button><button type="submit" id="delete-confirm" class="btn-danger">Delete resource</button></div></form>
+</dialog>
 <div id="toast" class="toast" role="status"></div>
 <script src="resources.js"></script><script src="seed.js"></script><script src="renderer.js"></script>
 </body></html>
