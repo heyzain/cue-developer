@@ -8,7 +8,8 @@ The current baseline is version **0.3.0**, with a warm, cream-colored editorial 
 
 - Save, edit, delete, and pin tools.
 - Search names, purposes, keywords, domains, and categories.
-- Organize tools into Design, Assets, Build, and Other task packs.
+- Create and rename categories; existing links follow category renames. Design, Assets, and Build are starting defaults, while Other holds resources without a category.
+- Save with only a URL: the domain fills the editable resource name. Purpose, search keywords, and category are optional.
 - Browse pinned and recently used tools, or open up to eight tools from a pack.
 - Import and export JSON backups; imports merge links by URL.
 - Keep Cue open after launching a website, or hide it using a saved preference.
@@ -53,7 +54,7 @@ To exit, right-click the tray icon and select **Quit Cue completely**. If both g
 
 Desktop data is stored in `cue-data.json` inside Electron's `app.getPath('userData')` directory, outside this repository. On Windows this is normally under `%APPDATA%`; the exact folder depends on the application identity and how Cue is launched.
 
-Updating the source folder keeps saved tools when the app identity and user-data path stay the same. Export important links before changing either. Import merges tools without replacing existing URLs; it does not restore exported preferences.
+Updating the source folder keeps saved tools when the app identity and user-data path stay the same. Export important links before changing either. Import merges resources and categories without replacing existing URLs; it does not restore exported preferences. Empty custom categories are included in backups.
 
 Opening `index.html` directly provides a browser preview using separate `localStorage`. It does not share desktop data or provide desktop window controls, global shortcuts, or tray integration. Everyday storage requires no account or cloud service; opening tools uses your browser and internet connection.
 
@@ -79,12 +80,15 @@ Build output goes to `release/`. `build-windows.cmd` installs dependencies and b
 | `renderer.js` | Interface behavior, search, and browser-preview storage |
 | `styles.css` | App styling and responsive layout |
 | `seed.js` | Default example tools |
+| `resources.js` | Shared URL and category rules for desktop and browser |
 | `assets/` | Icons and decorative images from the generated design concept |
 | `scripts/launch.cjs` | Windows startup and diagnostic logging |
 
 ## Development checks
 
-There is currently no automated test suite. Check JavaScript syntax before committing:
+Run `npm test` for category migration, rename, validation, and URL normalization checks. Run `npm run test:ui` for an isolated Electron renderer smoke test (uses temporary data, never your saved links). The UI test requires a working local Electron runtime and Windows sandbox permissions.
+
+Check JavaScript syntax before committing:
 
 ```sh
 node --check main.js

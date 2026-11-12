@@ -1,5 +1,7 @@
 const { contextBridge, ipcRenderer } = require('electron');
 contextBridge.exposeInMainWorld('cue', {
+  categories: () => ipcRenderer.invoke('categories:list'),
+  saveCategory: (name, previous) => ipcRenderer.invoke('categories:save', {name, previous}),
   list: () => ipcRenderer.invoke('items:list'),
   upsert: (item) => ipcRenderer.invoke('items:upsert', item),
   remove: (id) => ipcRenderer.invoke('items:remove', id),

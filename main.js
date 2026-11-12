@@ -3,6 +3,7 @@ const path = require('node:path');
 const fs = require('node:fs');
 const crypto = require('node:crypto');
 const SEED = require('./seed');
+const resources = require('./resources');
 // Startup breadcrumbs appear in cue-launch.log when run-windows.cmd is used.
 function startupLog(message, error) {
   const details = error ? `: ${error.stack || error.message || String(error)}` : '';
@@ -21,17 +22,9 @@ let win, tray, inDialog = false;
 const DEFAULT_PREFERENCES = Object.freeze({ keepOpenAfterLaunch: true });
 if (process.platform === 'win32') app.setAppUserModelId('com.cue.devlauncher');
 let registeredShortcut = 'Ctrl+Shift+Space';
-const PACKS = ['Design', 'Assets', 'Build', 'Other'];
 const DB_FILE = () => path.join(app.getPath('userData'), 'cue-data.json');
 const now = () => new Date().toISOString();
-const normalizeUrl = (input) => {
-  if (typeof input !== 'string' || input.length > 2048) throw new Error('Enter a valid URL under 2048 characters.');
-  const candidate = input.trim().match(/^https?:\/\//i) ? input.trim() : `https://${input.trim()}`;
-  let url;
-  try { url = new URL(candidate); } catch { throw new Error('That URL does not look valid.'); }
-  if (!['https:', 'http:'].includes(url.protocol) || !url.hostname || url.username || url.password) throw new Error('Only HTTP or HTTPS website links are allowed.');
-  return url.href;
-};
+const normalizeUrl = resources.normalizeUrl;
 const cloneSeed = () => SEED.map(x => ({...x, createdAt: now()}));
 function storeRead() {
   try {
@@ -70,7 +63,7 @@ function cleanItem(input, old) {
   const purpose = safe(input.purpose, 240);
   return {
     id: old?.id || crypto.randomUUID(), title, url, purpose,
-    keywords: safe(input.keywords, 280), pack: PACKS.includes(input.pack) ? input.pack : 'Other',
+    keywords: safe(input.keywords, 280), pack: resources.categories(storeRead()).find(x => x.toLowerCase() === String(input.pack || 'Other').toLowerCase()) || 'Other',
     pinned: Boolean(input.pinned), openCount: old?.openCount || 0,
     lastUsed: old?.lastUsed || null, createdAt: old?.createdAt || now()
   };
@@ -166,11 +159,18 @@ app.whenReady().then(() => {
   createTray(); startupLog('Tray icon created');
   registerHotkey(); startupLog(`Global shortcut: ${registeredShortcut}`);
   showWindow();
+  ipcMain.handle('categories:list', () => resources.categories(storeRead()));
+  ipcMain.handle('categories:save', (_event, {name, previous}) => {
+    const store = resources.saveCategory(storeRead(), name, previous);
+    storeWrite(store);
+    return {categories:resources.categories(store), items:store.items};
+  });
   ipcMain.handle('items:list', ()=>storeRead().items);
   ipcMain.handle('items:upsert', (_e, item) => {
     const store=storeRead();
     const old=item.id ? store.items.find(x=>x.id===item.id) : undefined;
     const cleaned=cleanItem(item, old);
+    if (store.items.some(x => x.id !== old?.id && normalizeUrl(x.url) === cleaned.url)) throw Error('This URL is already saved.');
     if (old) store.items[store.items.findIndex(x=>x.id===old.id)] = cleaned;
     else store.items.unshift(cleaned);
     storeWrite(store);
@@ -212,9 +212,10 @@ app.whenReady().then(() => {
       if (res.canceled || !res.filePaths?.length) return {cancelled:true};
       const input=JSON.parse(fs.readFileSync(res.filePaths[0],'utf8'));
       if (!Array.isArray(input.items) || input.items.length>2000) throw new Error('Invalid Cue backup.');
-      const store=storeRead(), urls=new Set(store.items.map(x=>x.url)), imported=[];
+      const store=storeRead(), urls=new Set(store.items.map(x=>normalizeUrl(x.url))), imported=[];
+      store.categories = resources.categories({categories:[...resources.categories(store), ...(Array.isArray(input.categories)?input.categories:[])], items:input.items});
       for (const candidate of input.items) {
-        try {const item=cleanItem({...candidate,id:null},null); if(!urls.has(item.url)){urls.add(item.url);imported.push(item);}} catch {}
+        try {const item=cleanItem({...candidate,id:null},null); item.pack=store.categories.find(x=>x.toLowerCase()===String(candidate.pack||'Other').toLowerCase())||'Other'; if(!urls.has(item.url)){urls.add(item.url);imported.push(item);}} catch {}
       }
       store.items.unshift(...imported); storeWrite(store);
       return {ok:true, count:imported.length, items:store.items};

@@ -10,7 +10,9 @@
     "start": "electron .",
     "dev": "electron . --dev",
     "dist:win": "electron-builder --win nsis",
-    "dist:portable": "electron-builder --win portable"
+    "dist:portable": "electron-builder --win portable",
+    "test": "node tests/resources.test.cjs",
+    "test:ui": "electron scripts/ui-smoke.cjs"
   },
   "devDependencies": {
     "electron": "45.3.0",
@@ -28,7 +30,8 @@
       "renderer.js",
       "seed.js",
       "assets/**/*",
-      "package.json"
+      "package.json",
+      "resources.js"
     ],
     "directories": {
       "output": "release"

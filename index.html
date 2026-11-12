@@ -32,12 +32,12 @@
    <div class="sidebar-brand drag-region"><span class="brand-mark">C</span><span class="brand-name">cue<span class="brand-dot">.</span></span><span class="brand-detail">DEV TOOLBOX</span></div>
    <nav id="main-nav" aria-label="Main navigation">
     <button type="button" class="nav-item selected" data-view="all"><svg><use href="#icon-folder"/></svg><span>Home</span></button>
-    <button type="button" class="nav-item" data-view="discover"><svg><use href="#icon-search"/></svg><span>Discover</span></button>
-    <button type="button" class="nav-item" data-view="pinned"><svg><use href="#icon-pin"/></svg><span>Pinned tools</span><span id="pin-count" class="nav-count"></span></button>
+    <button type="button" class="nav-item" data-view="discover"><svg><use href="#icon-search"/></svg><span>All resources</span></button>
+    <button type="button" class="nav-item" data-view="pinned"><svg><use href="#icon-pin"/></svg><span>Pinned resources</span><span id="pin-count" class="nav-count"></span></button>
     <button type="button" class="nav-item" data-view="recent"><svg><use href="#icon-clock"/></svg><span>Recently used</span></button>
    </nav>
-   <div class="sidebar-section-head"><span>Task packs</span><button class="tiny-add" id="sidebar-add" title="Add a tool">+</button></div>
-   <nav id="pack-nav" aria-label="Task packs">
+   <div class="sidebar-section-head"><span>Categories</span><button class="tiny-add" id="sidebar-add" title="Create category">+</button></div>
+   <nav id="pack-nav" aria-label="Categories">
     <button type="button" class="pack-nav-item" data-view="Design"><span class="pack-dot design"></span>Design <span class="pack-nav-count" data-pack-count="Design"></span></button>
     <button type="button" class="pack-nav-item" data-view="Assets"><span class="pack-dot assets"></span>Assets <span class="pack-nav-count" data-pack-count="Assets"></span></button>
     <button type="button" class="pack-nav-item" data-view="Build"><span class="pack-dot build"></span>Build <span class="pack-nav-count" data-pack-count="Build"></span></button>
@@ -49,8 +49,8 @@
   </aside>
   <main class="content">
    <header class="topbar drag-region">
-    <div class="search-wrap no-drag"><svg class="search-leading"><use href="#icon-search"/></svg><input id="search-input" autocomplete="off" spellcheck="false" placeholder="Search tools, tasks, or anything..." aria-label="Search your tools by task"/><button id="search-clear" title="Clear search" class="search-clear hidden"><svg><use href="#icon-close"/></svg></button><span class="search-shortcut">Ctrl K</span></div>
-    <div class="topbar-actions no-drag"><button id="add-floating" class="topbar-save" title="Save a tool (Ctrl+N)"><svg><use href="#icon-plus"/></svg><span>New tool</span></button><div class="window-controls"><button type="button" class="icon-button" id="minimize-button" title="Minimize to taskbar" aria-label="Minimize"><svg><use href="#icon-minimize"/></svg></button><button type="button" class="icon-button" id="tray-button" title="Hide to tray" aria-label="Hide to tray"><svg><use href="#icon-tray"/></svg></button><button type="button" class="icon-button window-close" id="hide-button" title="Close to tray" aria-label="Close to tray"><svg><use href="#icon-close"/></svg></button></div></div>
+    <div class="search-wrap no-drag"><svg class="search-leading"><use href="#icon-search"/></svg><input id="search-input" autocomplete="off" spellcheck="false" placeholder="Search resources by name or purpose..." aria-label="Search your resources by task"/><button id="search-clear" title="Clear search" class="search-clear hidden"><svg><use href="#icon-close"/></svg></button><span class="search-shortcut">Ctrl K</span></div>
+    <div class="topbar-actions no-drag"><button id="add-floating" class="topbar-save" title="Add resource (Ctrl+N)"><svg><use href="#icon-plus"/></svg><span>Add resource</span></button><div class="window-controls"><button type="button" class="icon-button" id="minimize-button" title="Minimize to taskbar" aria-label="Minimize"><svg><use href="#icon-minimize"/></svg></button><button type="button" class="icon-button" id="tray-button" title="Hide to tray" aria-label="Hide to tray"><svg><use href="#icon-tray"/></svg></button><button type="button" class="icon-button window-close" id="hide-button" title="Close to tray" aria-label="Close to tray"><svg><use href="#icon-close"/></svg></button></div></div>
    </header>
    <div class="content-scroll" id="content-scroll"><div id="content-body"></div></div>
    <div class="bottom-bar"><label class="keep-open-option" title="When enabled, Cue remains visible after opening a website"><input type="checkbox" id="keep-open-toggle" checked/><span class="switch-track" aria-hidden="true"><span></span></span><span>Keep Cue open after launch</span></label><span class="key-help">Ctrl + Shift + Space · summon Cue <span class="bottom-divider">·</span> Esc · hide</span></div>
@@ -61,16 +61,19 @@
   <div class="modal-overlay" data-close></div>
   <section class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-heading">
     <div class="modal-heading"><span class="modal-eyebrow">YOUR PERSONAL TOOLBOX</span><button type="button" class="icon-button" id="modal-close" aria-label="Close"><svg><use href="#icon-close"/></svg></button></div>
-    <h2 id="modal-heading">Save a useful tool<span class="accent">.</span></h2>
-    <p class="modal-subtitle">Give it a purpose you'll remember. That's the whole trick.</p>
+    <h2 id="modal-heading">Add a resource<span class="accent">.</span></h2>
+    <p class="modal-subtitle">Paste a URL to save. Add a purpose if you want to find it by task.</p>
     <form id="tool-form"><input type="hidden" id="tool-id"/><label for="tool-url">WEBSITE URL <span class="required">*</span></label><div class="url-line"><input id="tool-url" type="text" placeholder="https://example.com" required/><button type="button" id="paste-url" class="paste-btn"><svg><use href="#icon-clipboard"/></svg> Paste</button></div>
-    <label for="tool-title">TOOL NAME <span class="muted">optional</span></label><input id="tool-title" placeholder="e.g. Dribbble" maxlength="100"/>
-    <label for="tool-purpose">WHAT WOULD YOU USE THIS FOR?</label><input id="tool-purpose" placeholder="e.g. Find dashboard UI inspiration" maxlength="240"/>
-    <div class="form-row"><div><label for="tool-pack">TASK PACK</label><select id="tool-pack"><option>Design</option><option>Assets</option><option>Build</option><option>Other</option></select></div><div><label for="tool-keywords">OTHER SEARCH WORDS <span class="muted">optional</span></label><input id="tool-keywords" placeholder="png, svg, vector, logo" maxlength="280"/></div></div>
-    <label class="pin-check"><input type="checkbox" id="tool-pinned"/><span class="check-ui"><svg><use href="#icon-check"/></svg></span><span>Keep this tool pinned for quick access</span></label>
-    <div class="modal-actions"><button type="button" class="btn-secondary" id="modal-cancel">Cancel</button><button type="submit" class="btn-primary"><svg><use href="#icon-plus"/></svg><span id="save-label">Save tool</span></button></div></form>
+    <label for="tool-title">RESOURCE NAME <span class="muted">optional</span></label><input id="tool-title" placeholder="Filled from the URL; edit anytime" maxlength="100"/>
+    <label for="tool-purpose">WHAT WOULD YOU USE THIS FOR? <span class="muted">optional</span></label><input id="tool-purpose" placeholder="e.g. Find dashboard UI inspiration" maxlength="240"/>
+    <div class="form-row"><div><label for="tool-pack">CATEGORY <span class="muted">optional</span></label><select id="tool-pack"><option>Design</option><option>Assets</option><option>Build</option><option>Other</option></select></div><div><label for="tool-keywords">OTHER SEARCH WORDS <span class="muted">optional</span></label><input id="tool-keywords" placeholder="png, svg, vector, logo" maxlength="280"/></div></div>
+    <label class="pin-check"><input type="checkbox" id="tool-pinned"/><span class="check-ui"><svg><use href="#icon-check"/></svg></span><span>Keep this resource pinned for quick access</span></label>
+    <div class="modal-actions"><button type="button" class="btn-secondary" id="modal-cancel">Cancel</button><button type="submit" class="btn-primary"><svg><use href="#icon-plus"/></svg><span id="save-label">Save resource</span></button></div></form>
   </section>
 </div>
+<dialog id="category-dialog" class="category-dialog" aria-labelledby="category-heading">
+ <form id="category-form"><h2 id="category-heading">New category</h2><label for="category-name">Category name</label><input id="category-name" required maxlength="40" autocomplete="off" placeholder="e.g. React or Reading"/><p id="category-error" role="alert"></p><div class="category-actions"><button type="button" id="category-cancel" class="btn-secondary">Cancel</button><button type="submit" class="btn-primary">Save category</button></div></form>
+</dialog>
 <div id="toast" class="toast" role="status"></div>
-<script src="seed.js"></script><script src="renderer.js"></script>
+<script src="resources.js"></script><script src="seed.js"></script><script src="renderer.js"></script>
 </body></html>
