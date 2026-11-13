@@ -111,7 +111,7 @@ npm run dist:portable
 npm run dist:win
 ```
 
-Output goes to `release/`. On Windows, `build-windows.cmd` installs dependencies and builds the portable executable. Windows is the configured packaging target; macOS and Linux packaging has not been configured or verified. Builds are unsigned. Launch at system startup is not implemented.
+Output goes to `release/`. On Windows, `build-windows.cmd` installs dependencies and builds the installer (`Cue-Setup-0.3.0.exe` for this version). Run that installer to add Cue to the Start menu, desktop, and Windows installed apps. Use `build-portable.cmd` for the separate portable executable (`Cue-Portable-0.3.0.exe`). The portable version extracts and launches without installing or registering shortcuts, so startup can take longer. Older `Cue 0.3.0.exe` files produced by the previous build script are portable; rebuilding does not convert or rename them. Windows is the configured packaging target; macOS and Linux packaging has not been configured or verified. Builds are unsigned. Launch at system startup is not implemented.
 
 ## Project Structure
 

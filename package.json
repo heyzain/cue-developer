@@ -47,7 +47,13 @@
     "nsis": {
       "oneClick": false,
       "allowToChangeInstallationDirectory": true,
-      "createDesktopShortcut": true
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Cue",
+      "artifactName": "Cue-Setup-${version}.${ext}"
+    },
+    "portable": {
+      "artifactName": "Cue-Portable-${version}.${ext}"
     }
   }
 }

@@ -2,8 +2,9 @@
 cd /d "%~dp0"
 call npm install
 if errorlevel 1 (pause & exit /b 1)
-call npm run dist:portable
+call npm run dist:win
 if errorlevel 1 (pause & exit /b 1)
 echo.
-echo Portable Windows app created in the release folder.
+echo Windows installer created in the release folder.
+echo Run Cue-Setup-*.exe to install Cue with Start menu and desktop shortcuts.
 pause
